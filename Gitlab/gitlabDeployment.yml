@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: gitlab
+  name: gitlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: gitlab
+    spec:
+      volumes:
+      - name: vol1
+        hostPath:
+          # directory location on host
+          path: /srv/gitlab/data
+          # this field is optional
+          type: Directory
+      - name: vol2
+        hostPath:
+          # directory location on host
+          path: /srv/gitlab/logs
+          # this field is optional
+          type: Directory
+      - name: vol3
+        hostPath:
+          # directory location on host
+          path: /srv/gitlab/config
+          # this field is optional
+          type: Directory
+
+      containers:
+      - image: gitlab/gitlab-ee:latest
+        name: gitlab-ee
+        ports:
+        - containerPort: 433
+        - containerPort: 22
+        - containerPort: 80
+        resources: 
+          requests:
+            memory: "256Mi"
+          limits:
+            memory: "4192Mi"
+        volumeMounts:
+        - mountPath: /var/opt/gitlab
+          name: vol1
+        - mountPath: /var/log/gitlab
+          name: vol2
+        - mountPath: /etc/gitlab
+          name: vol3
+status: {}
