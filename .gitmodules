@@ -1,0 +1,3 @@
+[submodule "API2"]
+	path = API2
+	url = git@github.com:Esqape/API2.git
